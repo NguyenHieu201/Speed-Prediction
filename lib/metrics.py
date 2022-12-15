@@ -93,7 +93,8 @@ def masked_mape_np(preds, labels, null_val=np.nan):
             mask = np.not_equal(labels, null_val)
         mask = mask.astype('float32')
         mask /= np.mean(mask)
-        mape = np.abs(np.divide(np.subtract(preds, labels).astype('float32'), labels))
+        mape = np.abs(np.divide(np.subtract(
+            preds, labels).astype('float32'), labels))
         mape = np.nan_to_num(mask * mape)
         return np.mean(mape)
 
@@ -138,7 +139,7 @@ def calculate_metrics(df_pred, df_test, null_val):
     :param null_val:
     :return:
     """
-    mape = masked_mape_np(preds=df_pred.as_matrix(), labels=df_test.as_matrix(), null_val=null_val)
-    mae = masked_mae_np(preds=df_pred.as_matrix(), labels=df_test.as_matrix(), null_val=null_val)
-    rmse = masked_rmse_np(preds=df_pred.as_matrix(), labels=df_test.as_matrix(), null_val=null_val)
+    mape = masked_mape_np(preds=df_pred, labels=df_test, null_val=null_val)
+    mae = masked_mae_np(preds=df_pred, labels=df_test, null_val=null_val)
+    rmse = masked_rmse_np(preds=df_pred, labels=df_test, null_val=null_val)
     return mae, mape, rmse

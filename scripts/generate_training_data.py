@@ -29,7 +29,8 @@ def generate_graph_seq2seq_io_data(
     data = np.expand_dims(df.values, axis=-1)
     data_list = [data]
     if add_time_in_day:
-        time_ind = (df.index.values - df.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
+        time_ind = (
+            df.index.values - df.index.values.astype("datetime64[D]")) / np.timedelta64(1, "D")
         time_in_day = np.tile(time_ind, [1, num_nodes, 1]).transpose((2, 1, 0))
         data_list.append(time_in_day)
     if add_day_in_week:
@@ -58,10 +59,12 @@ def generate_train_val_test(args):
     # 0 is the latest observed sample.
     x_offsets = np.sort(
         # np.concatenate(([-week_size + 1, -day_size + 1], np.arange(-11, 1, 1)))
-        np.concatenate((np.arange(-11, 1, 1),))
+        np.concatenate((np.arange(-23, 1, 1),))
     )
     # Predict the next one hour
-    y_offsets = np.sort(np.arange(1, 13, 1))
+    y_offsets = np.sort(np.arange(3, 37, 3))
+
+    print(x_offsets, y_offsets)
     # x: (num_samples, input_length, num_nodes, input_dim)
     # y: (num_samples, output_length, num_nodes, output_dim)
     x, y = generate_graph_seq2seq_io_data(
